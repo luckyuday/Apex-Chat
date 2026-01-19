@@ -3,6 +3,7 @@
 @font-face {
     font-family: "Montserrat";
     src: url(./assets/fonts/Montserrat-VariableFont_wght.woff2) format("woff2");
+    
 }
 @font-face{
     font-family:"Quicksand";
@@ -10,8 +11,18 @@
 }
 
 @theme{
-    --color-background: #0F1221;
+    --color-primary-background: #212121 ;
+    --color-secondary-background: #171717 ;
+    --color-accent: #007BFF ;
+    --color-primary: #fefefe;
     --font-heading:"Montserrat", serif;
     --font-content:"Quicksand", serif;
 }
 
+*{
+    outline:none;
+}
+
+html{
+    font-size: clamp(8px, calc(14px + 1vw), 24px);
+}

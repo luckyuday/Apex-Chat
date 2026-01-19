@@ -1,9 +1,8 @@
 import { ToastContainer } from "react-toastify";
 import AppRoutes from "./routes/AppRoutes";
-import Navbar from "./components/Navbar";
+
 const App = () => {
-  return <div className="bg-background text-white font-content min-h-screen p-5 ">
-  <Navbar/>
+  return <div className="bg-primary-background font-content text-primary min-h-fit h-screen  flex flex-col">
   <AppRoutes/>
   <ToastContainer/>
   </div>;
