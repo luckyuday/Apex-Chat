@@ -15,6 +15,10 @@ const chatSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    isNew: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );

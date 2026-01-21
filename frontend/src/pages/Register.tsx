@@ -1,74 +1,119 @@
 import { Link } from "react-router-dom";
-
+import { useForm } from "react-hook-form";
+import type { UserForm } from "../../types/user";
+import type { SubmitHandler } from "react-hook-form";
 const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserForm>();
+  const submitFunction: SubmitHandler<UserForm> = (data) => {
+    console.log(data);
+  };
   return (
     <div className="w-full min-h-fit h-screen flex justify-center items-center">
-      <div className="bg-secondary-background flex flex-col px-10 py-8 rounded-xl gap-2 min-w-fit w-1/3">
-        <h2 className="text-xl font-heading font-semibold">Register</h2>
-        <form action="" method="" className="flex flex-col gap-5">
+      <div className="bg-secondary-background text-sm flex flex-col px-10 py-8 rounded-xl gap-10 min-w-fit w-full md:w-1/3">
+        <h2 className="text-3xl font-heading text-center font-semibold">
+          Register
+        </h2>
+        <form
+          onSubmit={handleSubmit(submitFunction)}
+          className="flex flex-col gap-5"
+        >
           <div className="flex flex-col md:flex-row justify-between gap-5 md:gap-10">
             <div>
-              <label htmlFor="firstName" className="text-sm">
-                First Name
-              </label>
-              <div className="border-b border-white">
+              <label htmlFor="firstName">First Name</label>
+              <div className="border-b border-primary">
                 <input
+                  {...register("fullName.firstName", {
+                    required: "First Name Cannot be empty",
+                  })}
                   type="text"
-                  name="firstName"
                   id="firstName"
-                  className="w-full mt-1 p-2  focus:bg-primary-background duration-75 "
+                  className="w-full mt-1 p-2 rounded-t-lg  focus:bg-primary-background duration-75 "
+                  placeholder="John"
                 />
               </div>
+              {errors.fullName?.firstName && (
+                <h6 className="text-[.5rem] text-red-400 mt-2 font-semibold">
+                  {errors.fullName.firstName.message}
+                </h6>
+              )}
             </div>
             <div>
-              <label htmlFor="lastName" className="text-sm">
-                Last Name
-              </label>
-              <div className="border-b border-white">
+              <label htmlFor="lastName">Last Name</label>
+              <div className="border-b border-primary">
                 <input
+                  {...register("fullName.lastName", {
+                    required: "Last Name Cannot be empty",
+                  })}
                   type="text"
-                  name="lastName"
-                  id="firstName"
-                  className="w-full mt-1 p-2  focus:bg-primary-background duration-75 "
+                  id="lastName"
+                  className="w-full mt-1 p-2 rounded-t-lg  focus:bg-primary-background duration-75 "
+                  placeholder="Doe"
                 />
               </div>
+              {errors.fullName?.lastName && (
+                <h6 className="text-[.5rem] text-red-400 mt-2 font-semibold">
+                  {errors.fullName.lastName.message}
+                </h6>
+              )}
             </div>
           </div>
-          <div className="border-b border-white">
-            <label htmlFor="email" className="text-sm">
-              Email
-            </label>
-            <br></br>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className="w-full mt-1 p-2  focus:bg-primary-background duration-75 "
-              required
-            />
+          <div>
+            <div className="border-b border-primary">
+              <label htmlFor="email">Email</label>
+              <br></br>
+              <input
+                {...register("email", {
+                  required: "Email cannot be empty",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Please enter valid email address.",
+                  },
+                })}
+                type="email"
+                id="email"
+                className="w-full mt-1 p-2 rounded-t-lg  focus:bg-primary-background duration-75"
+                placeholder="xyz@mail.com"
+              />
+            </div>
+            {errors.email && (
+              <h6 className="text-[.5rem] text-red-400 mt-2 font-semibold">
+                {errors.email.message}
+              </h6>
+            )}
           </div>
           <div className="flex justify-between  flex-col md:flex-row gap-5 md:gap-10">
             <div>
-              <label htmlFor="password" className="text-sm">Password</label>
-              <div className="border-b border-white">
+              <label htmlFor="password">Password</label>
+              <div className="border-b border-primary">
                 <input
+                  {...register("password", {
+                    required: "Password cannot be empty",
+                  })}
                   type="password"
-                  name="password"
                   id="password"
-                  className="w-full mt-1 p-2  focus:bg-primary-background duration-75"
-                  required
+                  placeholder="••••••"
+                  className="w-full mt-1 p-2 rounded-t-lg focus:bg-primary-background duration-75"
                 />
               </div>
+              {errors?.password && (
+                <h6 className="text-[.5rem] text-red-400 mt-2 font-semibold">
+                  {errors.password.message}
+                </h6>
+              )}
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="text-sm">Confirm Password</label>
-              <div className="border-b border-white">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <div className="border-b border-primary">
                 <input
                   type="password"
-                  name="confirmPassword"
                   id="confirmPassword"
-                  className="w-full mt-1 p-2  focus:bg-primary-background duration-75"
-                  required
+                  {...register("confirmPassword", { onChange: () => {} })}
+                  placeholder="••••••"
+                  className="w-full mt-1 p-2 rounded-t-lg focus:bg-primary-background duration-75"
                 />
               </div>
             </div>

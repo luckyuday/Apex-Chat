@@ -2,10 +2,9 @@ interface FullName {
   firstName: string;
   lastName: string;
 }
-interface User {
-  _id: string;
+export interface UserForm {
   email: string;
   fullName: FullName;
+  password: string;
+  confirmPassword: string;
 }
-
-
