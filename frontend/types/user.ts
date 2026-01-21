@@ -8,3 +8,8 @@ export interface UserForm {
   password: string;
   confirmPassword: string;
 }
+
+interface uiState {
+  token: string;
+  chatId: string;
+}

@@ -1,13 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-interface uiState {
-  token: string;
-  chatId: string;
-}
+import type { uiState } from "../../types/ui";
 const initialState: uiState = {
   token: "",
   chatId: "",
+  baseUrl: "http://localhost:3000/",
 };
 
 export const UiSlice = createSlice({

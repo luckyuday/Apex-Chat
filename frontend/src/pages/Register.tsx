@@ -6,15 +6,19 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    trigger,
+    reset,
+    watch,
     formState: { errors },
   } = useForm<UserForm>();
+  const password = watch("password");
   const submitFunction: SubmitHandler<UserForm> = (data) => {
     console.log(data);
   };
   return (
     <div className="w-full min-h-fit h-screen flex justify-center items-center">
       <div className="bg-secondary-background text-sm flex flex-col px-10 py-8 rounded-xl gap-10 min-w-fit w-full md:w-1/3">
-        <h2 className="text-3xl font-heading text-center font-semibold">
+        <h2 className="text-4xl font-heading text-center font-semibold ">
           Register
         </h2>
         <form
@@ -62,9 +66,8 @@ const Register = () => {
             </div>
           </div>
           <div>
-            <div className="border-b border-primary">
-              <label htmlFor="email">Email</label>
-              <br></br>
+            <label htmlFor="email">Email</label>
+            <div className="border-b border-primary w-full">
               <input
                 {...register("email", {
                   required: "Email cannot be empty",
@@ -92,6 +95,9 @@ const Register = () => {
                 <input
                   {...register("password", {
                     required: "Password cannot be empty",
+                    onChange: () => {
+                      trigger("confirmPassword");
+                    },
                   })}
                   type="password"
                   id="password"
@@ -111,7 +117,9 @@ const Register = () => {
                 <input
                   type="password"
                   id="confirmPassword"
-                  {...register("confirmPassword", { onChange: () => {} })}
+                  {...register("confirmPassword", {
+                    validate: (value) => value === password,
+                  })}
                   placeholder="••••••"
                   className="w-full mt-1 p-2 rounded-t-lg focus:bg-primary-background duration-75"
                 />
