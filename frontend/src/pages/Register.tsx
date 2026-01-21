@@ -32,6 +32,10 @@ const Register = () => {
                 <input
                   {...register("fullName.firstName", {
                     required: "First Name Cannot be empty",
+                    maxLength: {
+                      value: 20,
+                      message: "Too long first name!",
+                    },
                   })}
                   type="text"
                   id="firstName"
@@ -118,12 +122,18 @@ const Register = () => {
                   type="password"
                   id="confirmPassword"
                   {...register("confirmPassword", {
-                    validate: (value) => value === password,
+                    validate: (value) =>
+                      value === password || "Passwords do not match",
                   })}
                   placeholder="••••••"
                   className="w-full mt-1 p-2 rounded-t-lg focus:bg-primary-background duration-75"
                 />
               </div>
+              {errors?.confirmPassword && (
+                <h6 className="text-[.5rem] text-red-400 mt-2 font-semibold">
+                  {errors.confirmPassword.message}
+                </h6>
+              )}
             </div>
           </div>
           <button
