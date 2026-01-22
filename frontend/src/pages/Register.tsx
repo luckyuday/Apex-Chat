@@ -55,6 +55,10 @@ const Register = () => {
                 <input
                   {...register("fullName.lastName", {
                     required: "Last Name Cannot be empty",
+                    maxLength: {
+                      value: 20,
+                      message: "Too long last name!",
+                    },
                   })}
                   type="text"
                   id="lastName"
@@ -75,6 +79,10 @@ const Register = () => {
               <input
                 {...register("email", {
                   required: "Email cannot be empty",
+                  maxLength: {
+                    value: 30,
+                    message: "Too long email!",
+                  },
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                     message: "Please enter valid email address.",
@@ -99,6 +107,10 @@ const Register = () => {
                 <input
                   {...register("password", {
                     required: "Password cannot be empty",
+                    maxLength: {
+                      value: 30,
+                      message: "Too long password!",
+                    },
                     onChange: () => {
                       trigger("confirmPassword");
                     },
@@ -122,6 +134,10 @@ const Register = () => {
                   type="password"
                   id="confirmPassword"
                   {...register("confirmPassword", {
+                    maxLength: {
+                      value: 20,
+                      message: "Too long first name!",
+                    },
                     validate: (value) =>
                       value === password || "Passwords do not match",
                   })}

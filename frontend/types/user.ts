@@ -9,6 +9,11 @@ export interface UserForm {
   confirmPassword: string;
 }
 
+export interface loginForm {
+  email: string;
+  password: string;
+}
+
 interface uiState {
   token: string;
   chatId: string;
