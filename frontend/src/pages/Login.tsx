@@ -1,11 +1,12 @@
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { loginForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
 import { instance } from "../services/axios";
 import { toast } from "react-toastify";
-import { AxiosError, isAxiosError, type AxiosResponse } from "axios";
+import { isAxiosError, type AxiosResponse } from "axios";
 const Login = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -13,21 +14,18 @@ const Login = () => {
     formState: { errors },
   } = useForm<loginForm>();
   const submitFunction: SubmitHandler<loginForm> = async (data) => {
-    console.log(data);
     try {
       const result: AxiosResponse = await instance.post(
         "/api/auth/login",
         data,
       );
-      console.log(result.data);
       toast.success(result.data.message);
       reset();
-      redirect("/");
+      navigate("/");
     } catch (err) {
-      console.log(err);
       if (isAxiosError(err)) {
         toast.error(err.response?.data?.message);
-      }
+      } else console.log(err);
     }
   };
   return (

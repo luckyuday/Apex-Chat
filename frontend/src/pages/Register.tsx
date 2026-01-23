@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { UserForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
+import { instance } from "../services/axios";
+import { isAxiosError, type AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 const Register = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -12,8 +16,20 @@ const Register = () => {
     formState: { errors },
   } = useForm<UserForm>();
   const password = watch("password");
-  const submitFunction: SubmitHandler<UserForm> = (data) => {
-    console.log(data);
+  const submitFunction: SubmitHandler<UserForm> = async (data) => {
+    try {
+      const result: AxiosResponse = await instance.post(
+        "/api/auth/register",
+        data,
+      );
+      toast.success(result.data.message);
+      reset();
+      navigate("/");
+    } catch (err) {
+      if (isAxiosError(err)) {
+        toast.error(err?.response?.data?.message);
+      } else console.log(err);
+    }
   };
   return (
     <div className="w-full min-h-fit h-screen flex justify-center items-center">
@@ -134,6 +150,9 @@ const Register = () => {
                   type="password"
                   id="confirmPassword"
                   {...register("confirmPassword", {
+                    onChange: () => {
+                      trigger("confirmPassword");
+                    },
                     maxLength: {
                       value: 20,
                       message: "Too long first name!",

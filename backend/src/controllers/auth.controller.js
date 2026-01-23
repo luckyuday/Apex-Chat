@@ -8,7 +8,6 @@ const registerUser = async (req, res) => {
     email,
     password,
   } = req.body;
-
   const isUserExists = await userModel.findOne({ email: email });
 
   if (isUserExists) {
@@ -34,7 +33,6 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  console.log(req.body);
   const { email, password } = req.body;
   const user = await userModel.findOne({ email });
   if (!user) {
