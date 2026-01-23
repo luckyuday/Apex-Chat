@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { loginForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
+import { instance } from "../services/axios";
+import { toast } from "react-toastify";
+import { AxiosError, isAxiosError, type AxiosResponse } from "axios";
 const Login = () => {
   const {
     register,
@@ -9,9 +12,23 @@ const Login = () => {
     reset,
     formState: { errors },
   } = useForm<loginForm>();
-  const submitFunction: SubmitHandler<loginForm> = (data) => {
+  const submitFunction: SubmitHandler<loginForm> = async (data) => {
     console.log(data);
-    reset();
+    try {
+      const result: AxiosResponse = await instance.post(
+        "/api/auth/login",
+        data,
+      );
+      console.log(result.data);
+      toast.success(result.data.message);
+      reset();
+      redirect("/");
+    } catch (err) {
+      console.log(err);
+      if (isAxiosError(err)) {
+        toast.error(err.response?.data?.message);
+      }
+    }
   };
   return (
     <div className="w-full min-h-fit h-screen flex justify-center items-center text-sm">

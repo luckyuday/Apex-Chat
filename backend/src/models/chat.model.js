@@ -15,7 +15,7 @@ const chatSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    isNew: {
+    new: {
       type: Boolean,
       default: false,
     },
