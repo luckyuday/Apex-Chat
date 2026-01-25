@@ -14,7 +14,11 @@ export interface loginForm {
   password: string;
 }
 
-interface uiState {
-  token: string;
-  chatId: string;
+export interface user {
+  email: string | "";
+}
+
+export interface authResponse {
+  message: string;
+  email: string;
 }

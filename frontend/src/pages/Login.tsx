@@ -1,10 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import type { loginForm } from "../../types/user";
+import type { authResponse, loginForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
 import { instance } from "../services/axios";
 import { toast } from "react-toastify";
 import { isAxiosError, type AxiosResponse } from "axios";
+import { useAppDispatch } from "../hooks/hooks";
+import { changeUser } from "../../store/slices/userSlice";
 const Login = () => {
   const navigate = useNavigate();
   const {
@@ -13,13 +15,15 @@ const Login = () => {
     reset,
     formState: { errors },
   } = useForm<loginForm>();
+  const dispatch = useAppDispatch();
   const submitFunction: SubmitHandler<loginForm> = async (data) => {
     try {
-      const result: AxiosResponse = await instance.post(
+      const result: AxiosResponse<authResponse> = await instance.post(
         "/api/auth/login",
         data,
       );
       toast.success(result.data.message);
+      dispatch(changeUser(result.data.email));
       reset();
       navigate("/");
     } catch (err) {
