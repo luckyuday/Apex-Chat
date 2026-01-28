@@ -1,0 +1,19 @@
+import { useGetChatsQuery } from "../../store/api/chatApi";
+import { ChatTab } from "./ChatTab";
+import type { chat } from "../../types/chat";
+export const ChatSessions = () => {
+  const { currentData, isSuccess, isFetching } = useGetChatsQuery();
+  if (isSuccess) console.log(currentData);
+  return (
+    <>
+      <h1>Recent Chats</h1>
+      <div className="overflow-y-auto">
+        {!isFetching
+          ? currentData?.map((chatData: chat) => {
+              return <ChatTab key={chatData._id} chat={chatData} />;
+            })
+          : ""}
+      </div>
+    </>
+  );
+};

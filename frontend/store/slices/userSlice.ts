@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 import type { user } from "../../types/user";
 const initialState: user = {
-  email: "",
+  email: "Guest",
 };
 
 export const userSlice = createSlice({

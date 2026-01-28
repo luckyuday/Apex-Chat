@@ -20,4 +20,10 @@ async function createChat(req, res) {
   });
 }
 
-module.exports = { createChat };
+async function getChats(req, res) {
+  const user = req.user;
+  const chats = await chatModel.find({ user }).select("title new");
+  res.status(200).json(chats);
+}
+
+module.exports = { createChat, getChats };
