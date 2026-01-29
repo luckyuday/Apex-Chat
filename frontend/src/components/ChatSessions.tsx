@@ -6,7 +6,7 @@ export const ChatSessions = () => {
   if (isSuccess) console.log(currentData);
   return (
     <>
-      <h1>Recent Chats</h1>
+      <h1 className="font-heading max-h-1/3">Recent Chats</h1>
       <div className="overflow-y-auto">
         {!isFetching
           ? currentData?.map((chatData: chat) => {

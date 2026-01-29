@@ -3,26 +3,25 @@
 @font-face {
     font-family: "Montserrat";
     src: url(./assets/fonts/Montserrat-VariableFont_wght.woff2) format("woff2");
-    
 }
-@font-face{
-    font-family:"Quicksand";
+@font-face {
+    font-family: "Quicksand";
     src: url(./assets/fonts/Quicksand-VariableFont_wght.woff2) format("woff2");
 }
 
-@theme{
-    --color-primary-background: #212121 ;
-    --color-secondary-background: #171717 ;
-    --color-accent: #007BFF ;
+@theme {
+    --color-primary-background: #212121;
+    --color-secondary-background: #171717;
+    --color-accent: #007bff;
     --color-primary: #fefefe;
-    --font-heading:"Montserrat", serif;
-    --font-content:"Quicksand", serif;
+    --font-heading: "Montserrat", sans-serif;
+    --font-content: "Quicksand", sans-serif;
 }
 
-*{
-    outline:none;
+* {
+    outline: none;
 }
 
-html{
+html {
     font-size: clamp(8px, calc(14px + 1vw), 24px);
 }
