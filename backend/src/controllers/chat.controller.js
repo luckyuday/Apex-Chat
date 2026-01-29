@@ -22,7 +22,7 @@ async function createChat(req, res) {
 
 async function getChats(req, res) {
   const user = req.user;
-  const chats = await chatModel.find({ user }).select("title new");
+  const chats = await chatModel.find({ user }).select("title lastActivity");
   res.status(200).json(chats);
 }
 

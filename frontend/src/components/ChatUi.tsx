@@ -1,3 +1,7 @@
 export const ChatUi = () => {
-  return <h1>ChatUi</h1>;
+  return (
+    <>
+      <main className="flex flex-col p-2"></main>
+    </>
+  );
 };
