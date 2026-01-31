@@ -20,6 +20,7 @@ function initSocketServer(httpServer) {
       const decoded = jwt.verify(cookies.token, process.env.JWT_SECRET);
       const user = await userModel.findById(decoded.id, "-password");
       socket.user = user;
+      console.log(socket.user);
       next();
     } catch (error) {
       next(new Error("Authentication Error: Invalid token provided"));
@@ -52,14 +53,11 @@ function initSocketServer(httpServer) {
         vectors: vectors,
         limit: 3,
         filter: {
-          user: {
-            $eq: socket.user._id,
-          },
+          user: socket.user._id.toString(),
         },
       });
 
-      console.log(query);
-
+      const memory = []; //Container that holds both short term and long term memory
       const stm = chatHistory.map((item) => {
         return {
           role: item.role,
@@ -71,14 +69,28 @@ function initSocketServer(httpServer) {
         role: "user",
         parts: [
           {
-            text: `This is the query returned from vector database. Use it to answer.\n ${query
+            text: `This is the query returned from vector database. Use it to answer.Also don't mention anything about backend.\n ${query
               .map((item) => item.metadata.text)
               .join("\n")}`,
           },
         ],
       };
+      if (query.length > 0) {
+        memory.push(ltm);
+      }
+      if (stm.length > 0) {
+        memory.push(...stm);
+      }
 
-      const response = await generateResponse([ltm, ...stm]);
+      //Case when memory is empty then current text is provided in memory
+      if (memory.length == 0) {
+        memory.push({
+          role: "user",
+          parts: [{ text: messagepayload.content }],
+        });
+      }
+
+      const response = await generateResponse(memory);
       socket.emit("ai-response", {
         content: response,
         chat: messagepayload.chat,

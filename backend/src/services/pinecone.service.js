@@ -14,13 +14,14 @@ async function createMemory({ vectors, metadata, messageId }) {
   ]);
 }
 
-async function queryMemory({ limit = 5, vectors, metadata }) {
+async function queryMemory({ limit = 5, vectors, filter }) {
   const data = await gptindex.query({
     vector: vectors[0].values,
     topK: limit,
-    filter: metadata ? { metadata } : undefined,
+    filter: filter ?? null,
     includeMetadata: true,
   });
+
   return data.matches;
 }
 

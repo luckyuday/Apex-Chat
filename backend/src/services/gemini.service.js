@@ -8,21 +8,25 @@ async function generateResponse(content) {
     contents: content,
     config: {
       temperature: 0.7,
-      systemInstruction: `You are a personal helper to the user always act in favor of their queries.`,
+      systemInstruction: `Your name is apex chat. You are a personal helper to the user always act in favor of their queries.`,
     },
   });
+  console.log(response.text);
   return response.text;
 }
 
 async function createEmbedding(content) {
   const result = await ai.models.embedContent({
     model: "gemini-embedding-001",
-    contents: content,
+    contents: [
+      {
+        parts: [{ text: content }],
+      },
+    ],
     config: {
       outputDimensionality: 768,
     },
   });
-
   return result.embeddings;
 }
 
