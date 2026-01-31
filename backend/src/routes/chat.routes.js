@@ -4,5 +4,4 @@ const router = express.Router();
 const { createChat, getChats } = require("../controllers/chat.controller");
 router.post("/", authUser, createChat);
 router.get("/", authUser, getChats);
-
 module.exports = router;
