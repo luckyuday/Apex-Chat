@@ -13,7 +13,7 @@ async function authMessage(req, res, next) {
     const verifiedChat = await chatModel.findOne({ _id: chat, user: userId });
     if (!verifiedChat) {
       return res.status(403).json({
-        message: "Unauthorised Request",
+        message: "Invalid chat ID",
       });
     }
     req.chat = verifiedChat;

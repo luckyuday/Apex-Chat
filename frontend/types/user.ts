@@ -15,7 +15,7 @@ export interface loginForm {
 }
 
 export interface user {
-  email: string | "";
+  email: string;
 }
 
 export interface authResponse {

@@ -5,3 +5,4 @@ const { getMessages } = require("../controllers/message.controller");
 const router = express.Router();
 
 router.get("/", authUser, authMessage, getMessages);
+module.exports = router;

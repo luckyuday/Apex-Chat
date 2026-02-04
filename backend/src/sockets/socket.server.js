@@ -30,7 +30,6 @@ function initSocketServer(httpServer) {
   io.on("connection", async (socket) => {
     console.log("Socket created: ", socket.id);
     socket.on("ai-message", async (messagepayload) => {
-      console.log(messagepayload.content);
       let [vectors, message, chatHistory] = await Promise.all([
         createEmbedding(messagepayload.content),
         messageModel.create({
