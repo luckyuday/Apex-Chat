@@ -2,12 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { authResponse, loginForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
-import { instance } from "../services/axios";
 import { toast } from "react-toastify";
-import { isAxiosError, type AxiosResponse } from "axios";
-import { useAppDispatch } from "../hooks/hooks";
-import { changeUser } from "../../store/slices/userSlice";
+import { useLoginUserMutation } from "../../store/api/userApi";
+
 const Login = () => {
+  const [loginUser, { isLoading }] = useLoginUserMutation();
   const navigate = useNavigate();
   const {
     register,
@@ -15,21 +14,15 @@ const Login = () => {
     reset,
     formState: { errors },
   } = useForm<loginForm>();
-  const dispatch = useAppDispatch();
   const submitFunction: SubmitHandler<loginForm> = async (data) => {
     try {
-      const result: AxiosResponse<authResponse> = await instance.post(
-        "/api/auth/login",
-        data,
-      );
-      toast.success(result.data.message);
-      dispatch(changeUser(result.data.email));
+      const result: authResponse = await loginUser(data).unwrap();
+      toast.success(result.message);
       reset();
       navigate("/");
     } catch (err) {
-      if (isAxiosError(err)) {
-        toast.error(err.response?.data?.message);
-      } else console.log(err);
+      console.log(err);
+      toast.error("Some error occured");
     }
   };
   return (
@@ -103,8 +96,9 @@ const Login = () => {
           <button
             type="submit"
             className="bg-accent w-full p-2 rounded-lg hover:cursor-pointer hover:scale-105 hover:opacity-95 active:scale-100 duration-75"
+            disabled={isLoading}
           >
-            Login
+            {!isLoading ? "Login" : "Logging in"}
           </button>
           <p className="text-[.75rem] text-right">
             New User?{" "}

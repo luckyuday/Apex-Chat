@@ -2,14 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { authResponse, UserForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
-import { instance } from "../services/axios";
-import { isAxiosError, type AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { useAppDispatch } from "../hooks/hooks";
-import { changeUser } from "../../store/slices/userSlice";
+import { useRegisterUserMutation } from "../../store/api/userApi";
 const Register = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
   const {
     register,
     handleSubmit,
@@ -21,18 +18,13 @@ const Register = () => {
   const password = watch("password");
   const submitFunction: SubmitHandler<UserForm> = async (data) => {
     try {
-      const result: AxiosResponse<authResponse> = await instance.post(
-        "/api/auth/register",
-        data,
-      );
-      dispatch(changeUser(result.data.email));
-      toast.success(result.data.message);
+      const result: authResponse = await registerUser(data).unwrap();
+      toast.success(result.message);
       reset();
       navigate("/");
     } catch (err) {
-      if (isAxiosError(err)) {
-        toast.error(err?.response?.data?.message);
-      } else console.log(err);
+      console.log(err);
+      toast.error("Some error occured");
     }
   };
   return (
@@ -178,8 +170,9 @@ const Register = () => {
           <button
             type="submit"
             className="bg-accent w-full p-2 rounded-lg hover:cursor-pointer hover:scale-105 hover:opacity-95 active:scale-100 duration-75"
+            disabled={isLoading}
           >
-            Register
+            {!isLoading ? "Register" : "Registering...."}
           </button>
           <p className="text-[.75rem] text-right">
             Already registered?{" "}
