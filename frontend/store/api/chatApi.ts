@@ -6,9 +6,11 @@ export const chatApi = createApi({
     baseUrl: "http://localhost:3000/api/chat",
     credentials: "include",
   }),
+  tagTypes: ["CHAT"],
   endpoints: (build) => ({
     getChats: build.query<chat[], void>({
       query: () => "/",
+      providesTags: ["CHAT"],
     }),
   }),
 });

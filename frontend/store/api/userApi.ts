@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { authResponse, loginForm, user, UserForm } from "../../types/user";
+import type { authResponse, loginForm, UserForm } from "../../types/user";
+import { chatApi } from "./chatApi";
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
@@ -8,7 +9,7 @@ export const userApi = createApi({
   }),
   tagTypes: ["USER"],
   endpoints: (build) => ({
-    getUser: build.query<user, void>({
+    getUser: build.query<authResponse, void>({
       query: () => "/user",
       providesTags: ["USER"],
     }),
@@ -28,10 +29,22 @@ export const userApi = createApi({
       }),
       invalidatesTags: ["USER"],
     }),
+    logoutUser: build.mutation<{ message: string }, void>({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(userApi.util.resetApiState());
+        dispatch(chatApi.util.resetApiState());
+      },
+    }),
   }),
 });
 export const {
   useGetUserQuery,
   useLoginUserMutation,
   useRegisterUserMutation,
+  useLogoutUserMutation,
 } = userApi;

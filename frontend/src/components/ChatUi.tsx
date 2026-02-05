@@ -1,7 +1,7 @@
 export const ChatUi = () => {
   return (
     <>
-      <main className="flex flex-col p-2">
+      <main className="flex flex-col p-4 w-full">
         <section></section>
         <div>
           <input type="text"></input>
