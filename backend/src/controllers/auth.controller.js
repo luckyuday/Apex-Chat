@@ -51,7 +51,7 @@ const loginUser = async (req, res) => {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
-  res.status(201).json({
+  res.status(200).json({
     email: user.email,
     message: "User logged in Successfully.",
   });

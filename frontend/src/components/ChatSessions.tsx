@@ -12,7 +12,9 @@ export const ChatSessions = () => {
     <>
       {user ? (
         <>
-          <h1 className="font-heading ">Recent Chats</h1>
+          <h1 className="font-heading text-sm md:text-[.7rem] lg:text-[.6rem]">
+            Recent Chats
+          </h1>
           <div className="overflow-y-auto max-h-80">
             {!isFetching
               ? currentData?.map((chatList: chat) => {
