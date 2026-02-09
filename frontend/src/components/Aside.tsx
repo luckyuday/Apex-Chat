@@ -37,7 +37,7 @@ export const Aside = () => {
   return (
     <aside
       ref={menuRef}
-      className="min-h-screen absolute flex flex-col px-3  py-5 items-center justify-between gap-5 bg-secondary-background w-4/5 -left-full duration-200 sm:w-1/2 md:w-2/5  lg:relative lg:left-0 lg:px-3 lg:w-1/3  lg:max-w-48 "
+      className="h-full overflow-y-auto absolute flex flex-col px-3  py-5 items-center justify-between gap-5 bg-secondary-background w-4/5 -left-full duration-200 sm:w-1/2 md:w-2/5  lg:relative lg:left-0 lg:px-3 lg:w-1/3  lg:max-w-48 "
     >
       <Menu
         className={`fixed top-8 left-5 z-20 duration-200  lg:hidden text-primary  ${isMenuOpen ? "hidden" : "block"}`}

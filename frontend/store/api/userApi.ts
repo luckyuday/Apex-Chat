@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { authResponse, loginForm, UserForm } from "../../types/user";
 import { chatApi } from "./chatApi";
+import { messageApi } from "./messageApi";
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
@@ -38,6 +39,7 @@ export const userApi = createApi({
         await queryFulfilled;
         dispatch(userApi.util.resetApiState());
         dispatch(chatApi.util.resetApiState());
+        dispatch(messageApi.util.resetApiState());
       },
     }),
   }),

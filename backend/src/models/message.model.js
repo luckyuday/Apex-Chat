@@ -20,7 +20,7 @@ const messageSchema = new mongoose.Schema(
       default: "user",
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false },
 );
 const messageModel = mongoose.model("message", messageSchema);
 

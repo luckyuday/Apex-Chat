@@ -17,8 +17,8 @@ export const ChatSessions = () => {
           </h1>
           <div className="overflow-y-auto max-h-80">
             {!isFetching
-              ? currentData?.map((chatList: chat) => {
-                  return <ChatTab key={chatList._id} chat={chatList} />;
+              ? currentData?.map((chat: chat) => {
+                  return <ChatTab key={chat._id} chat={chat} />;
                 })
               : ""}
           </div>

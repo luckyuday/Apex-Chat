@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import type { authResponse, loginForm } from "../../types/user";
+import type { loginForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useLoginUserMutation } from "../../store/api/userApi";
@@ -16,7 +16,7 @@ const Login = () => {
   } = useForm<loginForm>();
   const submitFunction: SubmitHandler<loginForm> = async (data) => {
     try {
-      const result: authResponse = await loginUser(data).unwrap();
+      const result = await loginUser(data).unwrap();
       toast.success(result.message);
       reset();
       navigate("/");
