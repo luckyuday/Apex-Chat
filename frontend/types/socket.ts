@@ -1,5 +1,7 @@
+import type { Message } from "./message";
+
 export interface ServerToClientEvents {
-  aiResponse: ({ chat, content }: { chat: string; content: string }) => void;
+  aiResponse: (message: Message) => void;
 }
 
 export interface ClientToServerEvents {

@@ -3,38 +3,38 @@ import { socket } from "../../services/socket";
 import { useGetUserQuery } from "../../store/api/userApi";
 import { useEffect, useState, type FormEvent } from "react";
 import type { Message } from "../../types/message";
-import { useAppSelector } from "../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { selectChat } from "../../store/slices/chatIdSlice";
+import { messageApi } from "../../store/api/messageApi";
 
 export const ChatUi = () => {
   const user = useGetUserQuery();
+  const [messageLock, setMessageLock] = useState<boolean>(false);
   const [userMessage, setUserMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const chat = useAppSelector(selectChat);
+  const chatId = useAppSelector(selectChat);
+  const dispatch = useAppDispatch();
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
-    setUserMessage("");
-    console.log("Submitted");
-    socket.emit("aiMessage", { chat, content: userMessage });
+    setMessageLock(true);
     const activeMessage: Message = {
       content: userMessage,
       role: "user",
       createdAt: new Date().toISOString(),
       _id: Date.now().toString(),
-      chat: chat,
+      chat: chatId,
     };
-    setMessages((prev) => [...prev, activeMessage]);
-
+    setUserMessage("");
     const responseMessage: Message = {
       _id: "pending",
       content: "Loading....",
       role: "model",
       createdAt: "pending",
-      chat: chat,
+      chat: chatId,
     };
-    setMessages((prev) => [...prev, responseMessage]);
+    setMessages((prev) => [...prev, activeMessage, responseMessage]);
+    socket.emit("aiMessage", { chat: chatId, content: userMessage });
   };
-  console.log(messages);
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Socket connected : ", socket.id);
@@ -42,15 +42,26 @@ export const ChatUi = () => {
     socket.on("disconnect", () => {
       console.log("Socket disconnected");
     });
-    socket.on("aiResponse", ({ chat, content }) => {
-      setMessages((prev) =>
-        prev.map((elem) =>
-          elem._id == "pending" ? { ...elem, chat, content } : elem,
-        ),
-      );
-    });
   }, []);
-
+  useEffect(() => {
+    const handler = (message: Message) => {
+      if (message.role == "model") {
+        setMessageLock(false);
+      }
+      dispatch(
+        messageApi.util.updateQueryData("getMessages", chatId, (draft) => {
+          console.log("UPDATER RUNNING");
+          draft.push(message);
+        }),
+      );
+      setMessages((prev) => prev.filter((e) => e.role != message.role));
+    };
+    socket.on("aiResponse", handler);
+    return () => {
+      socket.off("aiResponse", handler);
+    };
+  }, [chatId, dispatch]);
+  console.log(messages);
   return (
     <main className="flex flex-col px-10 pt-10 pb-5 w-full justify-end gap-5 h-full">
       <ChatHistory activeMessages={messages} />
@@ -66,7 +77,7 @@ export const ChatUi = () => {
             !user.currentData ? "Please Login to chat" : "Enter text..."
           }
           value={userMessage}
-          disabled={!user.currentData || !chat}
+          disabled={!user.currentData || !chatId || messageLock}
           onChange={(e) => {
             setUserMessage(e.target.value);
           }}

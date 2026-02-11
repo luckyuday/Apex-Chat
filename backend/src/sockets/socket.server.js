@@ -42,6 +42,7 @@ function initSocketServer(httpServer) {
           content: messagepayload.content,
           role: "user",
         });
+        socket.emit("aiResponse", message);
         let [vectors, chatHistory] = await Promise.all([
           createEmbedding(messagepayload.content),
           messageModel
@@ -92,10 +93,6 @@ function initSocketServer(httpServer) {
         });
 
         const response = await generateResponse(memory);
-        socket.emit("aiResponse", {
-          content: response,
-          chat: messagepayload.chat,
-        });
 
         const [responseVectors, responseMessage] = await Promise.all([
           createEmbedding(response),
@@ -106,6 +103,7 @@ function initSocketServer(httpServer) {
             role: "model",
           }),
         ]);
+        socket.emit("aiResponse", responseMessage);
         await createMemory({
           vectors,
           messageId: message._id,
@@ -126,6 +124,9 @@ function initSocketServer(httpServer) {
         });
       } catch (err) {
         socket.emit("aiResponse", {
+          user: socket.user._id,
+          createdAt: new Date().toISOString(),
+          role: "model",
           content: "Error generating response",
           chat: messagepayload.chat,
         });

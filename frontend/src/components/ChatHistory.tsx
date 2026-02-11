@@ -14,7 +14,7 @@ export const ChatHistory = memo(
         skip: chatID.length == 0 || chatID == null,
       },
     );
-    console.log(currentData);
+
     return (
       <section className="overflow-y-scroll pr-5">
         {isSuccess && currentData

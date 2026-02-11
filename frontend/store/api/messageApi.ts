@@ -9,7 +9,7 @@ export const messageApi = createApi({
   tagTypes: ["MESSAGES"],
   endpoints: (build) => ({
     getMessages: build.query<Message[], string>({
-      query: (chatId) => ({ url: `/${chatId}/` }),
+      query: (chatId) => ({ url: `/${chatId}` }),
       providesTags: ["MESSAGES"],
     }),
   }),
