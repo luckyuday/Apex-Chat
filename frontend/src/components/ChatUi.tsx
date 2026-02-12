@@ -50,7 +50,6 @@ export const ChatUi = () => {
       }
       dispatch(
         messageApi.util.updateQueryData("getMessages", chatId, (draft) => {
-          console.log("UPDATER RUNNING");
           draft.push(message);
         }),
       );
@@ -61,12 +60,12 @@ export const ChatUi = () => {
       socket.off("aiResponse", handler);
     };
   }, [chatId, dispatch]);
-  console.log(messages);
+
   return (
-    <main className="flex flex-col px-10 pt-10 pb-5 w-full justify-end gap-5 h-full">
+    <main className="flex flex-col px-3  lg:px-10 pt-5 lg:pt-10 pb-5 w-full justify-end gap-5 h-full">
       <ChatHistory activeMessages={messages} />
       <form
-        className="w-full flex justify-center items-center py-2 px-5 border rounded-full"
+        className=" flex justify-center items-center py-2 px-5  mx-10  lg:m-0 border rounded-full"
         onSubmit={submitHandler}
       >
         <input

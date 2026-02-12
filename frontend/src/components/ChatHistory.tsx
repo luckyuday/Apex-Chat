@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect, useLayoutEffect, useRef } from "react";
 import { useGetMessagesQuery } from "../../store/api/messageApi";
 import { selectChat } from "../../store/slices/chatIdSlice";
 import { useAppSelector } from "../hooks/hooks";
@@ -11,12 +11,21 @@ export const ChatHistory = memo(
     const { currentData, isError, isFetching, isSuccess } = useGetMessagesQuery(
       chatID,
       {
-        skip: chatID.length == 0 || chatID == null,
+        skip: !chatID,
       },
     );
-
+    const chatHistoryRef = useRef<HTMLElement | null>(null);
+    useEffect(() => {
+      console.log(chatHistoryRef.current.scrollHeight);
+      chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+    }, [isFetching, chatID]);
+    useEffect(() => {
+      if (activeMessages.length > 0) {
+        chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+      }
+    }, [activeMessages]);
     return (
-      <section className="overflow-y-scroll pr-5">
+      <section className="overflow-y-auto  w-full h-full" ref={chatHistoryRef}>
         {isSuccess && currentData
           ? currentData.map((message) => (
               <ChatMessage key={message._id} message={message} />
