@@ -3,10 +3,12 @@
 @font-face {
     font-family: "Montserrat";
     src: url(./assets/fonts/Montserrat-VariableFont_wght.woff2) format("woff2");
+    font-display: swap;
 }
 @font-face {
     font-family: "Quicksand";
     src: url(./assets/fonts/Quicksand-VariableFont_wght.woff2) format("woff2");
+    font-display: swap;
 }
 
 @theme {
@@ -43,11 +45,12 @@ pre {
     padding: 0.5rem;
     border: none;
     border-radius: 0.5rem;
-    text-wrap: wrap;
+    overflow-x: auto;
+    white-space: pre;
 }
 
-code {
-    word-break: break-all;
+:not(pre) > code {
+    overflow-wrap: break-word;
 }
 
 @media (min-width: 1024px) {
