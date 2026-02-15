@@ -1,3 +1,4 @@
+import { Ellipsis } from "lucide-react";
 import { setChatId } from "../../store/slices/chatIdSlice";
 import type { chat } from "../../types/chat";
 import { useAppDispatch } from "../hooks/hooks";
@@ -10,10 +11,20 @@ export const ChatTab = ({ chat }: { chat: chat }) => {
         console.log("Button pressed");
         dispatch(setChatId(chat._id));
       }}
+      className="flex items-center justify-between hover:cursor-pointer hover:bg-primary-background rounded-xl py-2 px-3"
     >
-      <h4 className="text-[.85rem] md:text-[.7rem] w-full  p-2  rounded-xl text-ellipsis hover:cursor-pointer hover:bg-primary-background active:scale-95 duration-75">
+      <h4 className="text-[.85rem] md:text-[.65rem] w-full  text-ellipsis  active:scale-95 duration-75">
         {chat.title}
       </h4>
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log("Menu opened");
+        }}
+        className="rounded-xl   hover:bg-secondary-background aspect-square p-[.1rem]"
+      >
+        <Ellipsis />
+      </div>
     </div>
   );
 };

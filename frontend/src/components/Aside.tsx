@@ -9,7 +9,7 @@ import {
 } from "../../store/api/userApi";
 import { toast } from "react-toastify";
 
-export const Aside = () => {
+const Aside = () => {
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const user = useGetUserQuery();
@@ -86,3 +86,5 @@ export const Aside = () => {
     </aside>
   );
 };
+
+export default Aside;

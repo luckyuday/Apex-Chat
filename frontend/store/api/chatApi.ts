@@ -12,6 +12,10 @@ export const chatApi = createApi({
       query: () => "/",
       providesTags: ["CHAT"],
     }),
+    createChat: build.mutation<chat, string>({
+      query: (chatName) => ({ url: "/", body: chatName, method: "POST" }),
+      invalidatesTags: ["CHAT"],
+    }),
   }),
 });
-export const { useGetChatsQuery } = chatApi;
+export const { useGetChatsQuery, useCreateChatMutation } = chatApi;

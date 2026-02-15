@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { selectChat } from "../../store/slices/chatIdSlice";
 import { messageApi } from "../../store/api/messageApi";
 
-export const ChatUi = () => {
+const ChatUi = () => {
   const user = useGetUserQuery();
   const [messageLock, setMessageLock] = useState<boolean>(false);
   const [userMessage, setUserMessage] = useState<string>("");
@@ -62,10 +62,10 @@ export const ChatUi = () => {
   }, [chatId, dispatch]);
 
   return (
-    <main className="flex flex-col px-3  lg:px-10 pt-5 lg:pt-10 pb-5 w-full justify-end gap-5 h-full">
+    <main className="flex flex-col pb-5 flex-1 min-w-0 justify-end  gap-5 h-full px-3 lg:px-10 pt-5 lg:pt-10 ">
       <ChatHistory activeMessages={messages} />
       <form
-        className=" flex justify-center items-center py-2 px-5  mx-10  lg:m-0 border rounded-full"
+        className="flex justify-center items-center py-1 px-2 mx-2 md:mx-6 lg:mx-10 border-b border-primary"
         onSubmit={submitHandler}
       >
         <input
@@ -73,7 +73,11 @@ export const ChatUi = () => {
           name="prompt"
           className="w-full text-[.7rem] md:text-[.6rem]"
           placeholder={
-            !user.currentData ? "Please Login to chat" : "Enter text..."
+            !user.currentData
+              ? "Please Login to chat"
+              : chatId
+                ? "Enter text..."
+                : "Please select a chat to talk"
           }
           value={userMessage}
           disabled={!user.currentData || !chatId || messageLock}
@@ -85,3 +89,5 @@ export const ChatUi = () => {
     </main>
   );
 };
+
+export default ChatUi;
