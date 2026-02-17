@@ -1,4 +1,4 @@
-import { ChatHistory } from "./ChatHistory";
+import ChatHistory from "./ChatHistory";
 import { socket } from "../../services/socket";
 import { useGetUserQuery } from "../../store/api/userApi";
 import { useEffect, useState, type FormEvent } from "react";

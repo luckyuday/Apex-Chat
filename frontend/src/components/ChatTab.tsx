@@ -8,7 +8,6 @@ export const ChatTab = ({ chat }: { chat: chat }) => {
   return (
     <div
       onClick={() => {
-        console.log("Button pressed");
         dispatch(setChatId(chat._id));
       }}
       className="flex items-center justify-between hover:cursor-pointer hover:bg-primary-background rounded-xl py-2 px-3"
@@ -19,11 +18,10 @@ export const ChatTab = ({ chat }: { chat: chat }) => {
       <div
         onClick={(e) => {
           e.stopPropagation();
-          console.log("Menu opened");
         }}
         className="rounded-xl   hover:bg-secondary-background aspect-square p-[.1rem]"
       >
-        <Ellipsis />
+        <Ellipsis className="hover:scale-110 active:scale-90 duration-50" />
       </div>
     </div>
   );

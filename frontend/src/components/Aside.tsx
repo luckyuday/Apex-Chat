@@ -2,29 +2,46 @@ import { Link } from "react-router-dom";
 import navicon from "../assets/navicon.png";
 import { ChatSessions } from "./ChatSessions";
 import { Menu, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   useGetUserQuery,
   useLogoutUserMutation,
 } from "../../store/api/userApi";
 import { toast } from "react-toastify";
+import { useMenuChecker } from "../hooks/useMenuChecker";
+import { useBreakpoint } from "../hooks/useBreakpoint";
 
 const Aside = () => {
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const isDesktopScreen = useBreakpoint("lg");
 
   const user = useGetUserQuery();
   const [logout] = useLogoutUserMutation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const menuClick = () => {
-    if (!menuRef.current) return;
+    if (isDesktopScreen) return;
     if (isMenuOpen) {
-      menuRef.current.style.left = "-100%";
       setIsMenuOpen(false);
     } else {
-      menuRef.current.style.left = "0%";
       setIsMenuOpen(true);
     }
   };
+
+  useEffect(() => {
+    if (isDesktopScreen) {
+      const handler = () => setIsMenuOpen(true);
+      handler();
+    } else {
+      const handler = () => {
+        setIsMenuOpen(false);
+      };
+      handler();
+    }
+  }, [isDesktopScreen]);
+
+  useMenuChecker(menuRef, () => setIsMenuOpen(false));
+
   const logoutHandler = async () => {
     try {
       const result = await logout().unwrap();
@@ -37,7 +54,7 @@ const Aside = () => {
   return (
     <aside
       ref={menuRef}
-      className="h-full overflow-y-auto absolute flex flex-col px-3  py-5 items-center justify-between gap-5 bg-secondary-background w-4/5 -left-full duration-200 sm:w-1/2 md:w-2/5  lg:relative lg:left-0 lg:px-3 lg:w-1/3 lg:min-w-fit  lg:max-w-48 "
+      className={`h-full overflow-y-auto absolute flex flex-col px-3  py-5 items-center justify-between gap-5 bg-secondary-background w-4/5  duration-200 sm:w-1/2 md:w-2/5 lg:relative lg:px-3 lg:w-1/3  lg:max-w-48 ${isDesktopScreen ? "left-0" : isMenuOpen ? "left-0 " : "-left-full "}`}
     >
       <Menu
         className={`fixed top-8 left-5 z-20 duration-200  lg:hidden text-primary  ${isMenuOpen ? "hidden" : "block"}`}

@@ -5,7 +5,7 @@ import { useAppSelector } from "../hooks/hooks";
 import { ChatMessage } from "./ChatMessage";
 import type { Message } from "../../types/message";
 
-export const ChatHistory = memo(
+const ChatHistory = memo(
   ({ activeMessages }: { activeMessages: Message[] }) => {
     const chatID = useAppSelector(selectChat);
     const { currentData, isFetching, isSuccess } = useGetMessagesQuery(chatID, {
@@ -46,3 +46,5 @@ export const ChatHistory = memo(
     );
   },
 );
+
+export default ChatHistory;

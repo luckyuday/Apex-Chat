@@ -5,5 +5,5 @@ import type {
 } from "../types/socket";
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   "http://localhost:3000/",
-  { withCredentials: true },
+  { withCredentials: true, reconnectionAttempts: 3 },
 );
