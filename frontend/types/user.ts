@@ -20,5 +20,5 @@ export interface user {
 
 export interface authResponse {
   message: string;
-  email: string;
+  email?: string;
 }

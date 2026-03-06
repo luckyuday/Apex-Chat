@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { chat } from "../../types/chat";
+import type { chat, createChat } from "../../types/chat";
 export const chatApi = createApi({
   reducerPath: "chatApi",
   baseQuery: fetchBaseQuery({
@@ -12,7 +12,7 @@ export const chatApi = createApi({
       query: () => "/",
       providesTags: ["CHAT"],
     }),
-    createChat: build.mutation<chat, string>({
+    createChat: build.mutation<chat, createChat>({
       query: (chatName) => ({ url: "/", body: chatName, method: "POST" }),
       invalidatesTags: ["CHAT"],
     }),

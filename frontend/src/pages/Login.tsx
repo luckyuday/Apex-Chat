@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import type { loginForm } from "../../types/user";
+import type { authResponse, loginForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useLoginUserMutation } from "../../store/api/userApi";
@@ -21,8 +21,13 @@ const Login = () => {
       reset();
       navigate("/");
     } catch (err) {
-      console.log(err);
-      toast.error("Some error occured");
+      if (typeof err == "object" && err != null && "data" in err) {
+        const error = err as { data: authResponse };
+        toast.error(error.data.message);
+      } else {
+        toast.error("Some error occured");
+        console.log(err);
+      }
     }
   };
   return (
@@ -84,6 +89,7 @@ const Login = () => {
                     value: 20,
                     message: "Password cannot be more than 20 characters",
                   },
+                  required: "Password cannot be empty",
                 })}
               />
             </div>

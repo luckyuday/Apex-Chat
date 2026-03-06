@@ -11,6 +11,7 @@ export const ChatTab = ({ chat }: { chat: chat }) => {
         dispatch(setChatId(chat._id));
       }}
       className="flex items-center justify-between hover:cursor-pointer hover:bg-primary-background rounded-xl py-2 px-3"
+      title={chat.title}
     >
       <h4 className="text-[.85rem] md:text-[.65rem] w-full  text-ellipsis  active:scale-95 duration-75">
         {chat.title}

@@ -62,7 +62,7 @@ const ChatUi = () => {
   }, [chatId, dispatch]);
 
   return (
-    <main className="flex flex-col pb-5 flex-1 min-w-0 justify-end  gap-5 h-full px-3 lg:px-10 pt-5 lg:pt-10 ">
+    <main className="flex flex-col pb-5 flex-1 min-w-0 justify-end  gap-5 h-full px-3 lg:px-10 pt-5 lg:pt-10 select-text">
       <ChatHistory activeMessages={messages} />
       <form
         className="flex justify-center items-center py-1 px-2 mx-2 md:mx-6 lg:mx-10 border-b border-primary"
