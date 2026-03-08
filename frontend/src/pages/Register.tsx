@@ -4,6 +4,7 @@ import type { authResponse, UserForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRegisterUserMutation } from "../../store/api/userApi";
+import { ArrowBigLeft } from "lucide-react";
 const Register = () => {
   const navigate = useNavigate();
   const [registerUser, { isLoading }] = useRegisterUserMutation();
@@ -27,9 +28,11 @@ const Register = () => {
       toast.error("Some error occured");
     }
   };
+
   return (
-    <div className="w-full min-h-fit h-screen flex justify-center items-center">
+    <div className="w-full min-h-fit h-screen flex justify-center items-center text-sm">
       <div className="bg-secondary-background text-sm flex flex-col px-10 py-8 rounded-xl gap-10 min-w-fit w-full md:w-1/3">
+        <ArrowBigLeft className="scale-130" onClick={() => navigate("/")} />
         <h2 className="text-4xl font-heading text-center font-semibold ">
           Register
         </h2>

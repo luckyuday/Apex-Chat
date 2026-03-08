@@ -15,7 +15,6 @@ import CreateChat from "./CreateChat";
 const Aside = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const isDesktopScreen = useBreakpoint("lg");
-
   const user = useGetUserQuery();
   const [logout] = useLogoutUserMutation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,7 +27,14 @@ const Aside = () => {
       setIsMenuOpen(true);
     }
   };
-
+  const createChatHandler = () => {
+    if (user.currentData) {
+      console.log(user);
+      setIsCreatingChat(true);
+    } else {
+      toast.error("Please login or register first.");
+    }
+  };
   useEffect(() => {
     if (isDesktopScreen) {
       const handler = () => setIsMenuOpen(true);
@@ -56,7 +62,7 @@ const Aside = () => {
     <>
       <aside
         ref={menuRef}
-        className={`h-full overflow-y-auto absolute flex flex-col px-3  py-5 items-center justify-between gap-5 bg-secondary-background w-4/5  duration-200 sm:w-1/2 md:w-2/5 lg:relative lg:px-3 lg:w-1/3  lg:max-w-48 ${isDesktopScreen ? "left-0" : isMenuOpen ? "left-0 " : "-left-full "}`}
+        className={`h-full sm:rounded-r-2xl overflow-y-auto absolute flex flex-col px-3  py-5 items-center justify-between gap-5 bg-secondary-background w-4/5  duration-200 sm:w-1/2 md:w-2/5 lg:relative lg:px-3 lg:w-1/3  lg:max-w-48 ${isDesktopScreen ? "left-0" : isMenuOpen ? "left-0 " : "-left-full "}`}
       >
         <Menu
           className={`fixed top-8 left-5 z-20 duration-200  lg:hidden text-primary  ${isMenuOpen ? "hidden" : "block"}`}
@@ -67,14 +73,14 @@ const Aside = () => {
           onClick={menuClick}
         />
         <div className="flex  flex-col w-full  justify-center gap-5 px-3 py-5">
-          <div className="w-full">
+          <div className="w-full flex sm:justify-center items-center pb-5">
             <Link to={"/"}>
               <img src={navicon} className="w-20"></img>
             </Link>
           </div>
           <button
-            className="rounded-full w-full max-w-60 lg:max-w-none text-[.8rem] md:text-[.6rem] text-center font-heading border-primary border p-2 hover:cursor-pointer active:scale-95 hover:scale-105 duration-95"
-            onClick={() => setIsCreatingChat(true)}
+            className="rounded-md  bg-primary-background w-full max-w-60 lg:max-w-none text-[.8rem] md:text-[.6rem] text-center font-heading p-2 hover:cursor-pointer active:scale-95 hover:scale-105 duration-95"
+            onClick={createChatHandler}
           >
             Create New chat
           </button>
@@ -84,13 +90,13 @@ const Aside = () => {
           <div className="flex flex-col gap-3 w-full px-3 py-5">
             <Link
               to={"/login"}
-              className="rounded-full w-full  max-w-60 lg:max-w-none text-[.8rem] md:text-[.6rem] text-center font-heading border-primary border p-2 hover:cursor-pointer active:scale-95 hover:scale-105 duration-95"
+              className="rounded-md bg-primary-background w-full  max-w-60 lg:max-w-none text-[.8rem] md:text-[.6rem] text-center font-heading p-2 hover:cursor-pointer active:scale-95 hover:scale-105 duration-95"
             >
               Login
             </Link>{" "}
             <Link
               to={"/register"}
-              className="rounded-full w-full max-w-60 lg:max-w-none text-[.8rem] md:text-[.6rem] text-center font-heading border-primary border p-2 hover:cursor-pointer active:scale-95 hover:scale-105 duration-95"
+              className="rounded-md bg-primary-background w-full max-w-60 lg:max-w-none text-[.8rem] md:text-[.6rem] text-center font-heading p-2 hover:cursor-pointer active:scale-95 hover:scale-105 duration-95"
             >
               Register
             </Link>
@@ -99,7 +105,7 @@ const Aside = () => {
           <div className="flex  flex-col w-full justify-center gap-5 px-3 py-5">
             <button
               onClick={logoutHandler}
-              className="rounded-full  max-w-60 lg:max-w-none text-[.8rem] md:text-[.6rem] text-center font-heading border-primary border p-2 hover:cursor-pointer active:scale-95 hover:scale-105 duration-95"
+              className="rounded-md bg-primary-background max-w-60 lg:max-w-none text-[.8rem] md:text-[.6rem] text-center font-heading p-2 hover:cursor-pointer active:scale-95 hover:scale-105 duration-95"
             >
               Logout
             </button>

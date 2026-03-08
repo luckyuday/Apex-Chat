@@ -4,6 +4,7 @@ import type { authResponse, loginForm } from "../../types/user";
 import type { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useLoginUserMutation } from "../../store/api/userApi";
+import { ArrowBigLeft } from "lucide-react";
 
 const Login = () => {
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -32,13 +33,16 @@ const Login = () => {
   };
   return (
     <div className="w-full min-h-fit h-screen flex justify-center items-center text-sm">
-      <div className="bg-secondary-background flex flex-col px-10 py-8 rounded-xl gap-2 min-w-fit w-full md:w-1/3">
-        <h2 className="text-2xl font-heading font-semibold text-center">
-          Welcome Back
-        </h2>
-        <h5 className=" font-heading opacity-80 text-center">
-          Continue your conversation
-        </h5>
+      <div className="bg-secondary-background relative flex flex-col px-10 py-8 rounded-xl gap-10 min-w-fit w-full md:w-1/3">
+        <ArrowBigLeft className="scale-130" onClick={() => navigate("/")} />
+        <div>
+          <h2 className="text-4xl font-heading font-semibold text-center mb-2">
+            Welcome Back
+          </h2>
+          <h5 className=" font-heading opacity-80 text-center">
+            Continue your conversation
+          </h5>
+        </div>
         <form
           onSubmit={handleSubmit(submitFunction)}
           className="flex flex-col gap-5"

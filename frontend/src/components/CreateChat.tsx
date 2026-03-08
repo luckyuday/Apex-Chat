@@ -10,12 +10,7 @@ const CreateChat = ({
 }: {
   setIsCreatingChat: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<createChat>({
+  const { register, handleSubmit, reset } = useForm<createChat>({
     defaultValues: {
       title: "New Chat",
     },
@@ -43,7 +38,7 @@ const CreateChat = ({
       }}
     >
       <div
-        className="border border-primary py-5 px-10 rounded-md "
+        className="border border-primary  py-5 px-10 rounded-md "
         onClick={(e) => {
           e.stopPropagation();
         }}

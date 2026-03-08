@@ -2,12 +2,15 @@ import { useGetChatsQuery } from "../../store/api/chatApi";
 import { ChatTab } from "./ChatTab";
 import type { chat } from "../../types/chat";
 import { useGetUserQuery } from "../../store/api/userApi";
+import ChatOptions from "./ChatOptions";
+import { useState } from "react";
 export const ChatSessions = () => {
   const user = useGetUserQuery();
   const { currentData, isFetching } = useGetChatsQuery(undefined, {
     skip: !user.currentData,
   });
 
+  const [isOptionsOpen, setIsOptionsopen] = useState(false);
   return (
     <>
       {user ? (
@@ -22,6 +25,10 @@ export const ChatSessions = () => {
                 })
               : ""}
           </div>
+          <ChatOptions
+            isOptionsOpen={isOptionsOpen}
+            setIsOptionsOpen={setIsOptionsopen}
+          />
         </>
       ) : (
         ""
