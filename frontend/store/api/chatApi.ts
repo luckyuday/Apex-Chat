@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { chat, createChat } from "../../types/chat";
+import { messageApi } from "./messageApi";
+import { setChatId } from "../slices/chatIdSlice";
 export const chatApi = createApi({
   reducerPath: "chatApi",
   baseQuery: fetchBaseQuery({
@@ -16,6 +18,19 @@ export const chatApi = createApi({
       query: (chatName) => ({ url: "/", body: chatName, method: "POST" }),
       invalidatesTags: ["CHAT"],
     }),
+    deleteChat: build.mutation<string, string>({
+      query: (chatID) => ({ url: `/${chatID}`, method: "DELETE" }),
+      invalidatesTags: ["CHAT"],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(messageApi.util.resetApiState());
+        dispatch(setChatId(""));
+      },
+    }),
   }),
 });
-export const { useGetChatsQuery, useCreateChatMutation } = chatApi;
+export const {
+  useGetChatsQuery,
+  useCreateChatMutation,
+  useDeleteChatMutation,
+} = chatApi;

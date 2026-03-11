@@ -3,11 +3,18 @@ import { setChatId } from "../../store/slices/chatIdSlice";
 import type { chat } from "../../types/chat";
 import { useAppDispatch } from "../hooks/hooks";
 
-export const ChatTab = ({ chat }: { chat: chat }) => {
+export const ChatTab = ({
+  chat,
+  optionsHandler,
+}: {
+  chat: chat;
+  optionsHandler: (e: React.MouseEvent<SVGSVGElement>) => void;
+}) => {
   const dispatch = useAppDispatch();
   return (
     <div
       onClick={() => {
+        console.log("parent activated");
         dispatch(setChatId(chat._id));
       }}
       className="flex items-center justify-between hover:cursor-pointer hover:bg-primary-background rounded-xl py-2 px-3"
@@ -16,14 +23,14 @@ export const ChatTab = ({ chat }: { chat: chat }) => {
       <h4 className="text-[.85rem] md:text-[.65rem] w-full  text-ellipsis  active:scale-95 duration-75">
         {chat.title}
       </h4>
-      <div
+
+      <Ellipsis
+        className="rounded-xl size-5  hover:bg-secondary-background aspect-square p-[.1rem] hover:scale-110 active:scale-90 duration-50"
         onClick={(e) => {
-          e.stopPropagation();
+          optionsHandler(e);
+          console.log("child ");
         }}
-        className="rounded-xl   hover:bg-secondary-background aspect-square p-[.1rem]"
-      >
-        <Ellipsis className="hover:scale-110 active:scale-90 duration-50" />
-      </div>
+      />
     </div>
   );
 };

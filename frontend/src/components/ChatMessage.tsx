@@ -15,7 +15,7 @@ export const ChatMessage = ({ message }: ChatMessageprops) => {
         {message.role.charAt(0).toUpperCase()}
       </div>
       <div
-        className={`py-2 px-3 min-w-0  rounded-sm ${message.role == "user" ? "bg-neutral-600" : "bg-neutral-800"}`}
+        className={`py-2 px-3 min-w-0  rounded-sm ${message.role == "user" ? "bg-stone-800" : "bg-tertiary-background"}`}
       >
         <Markdown>{message.content}</Markdown>
       </div>

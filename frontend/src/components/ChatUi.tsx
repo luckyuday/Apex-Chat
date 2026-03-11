@@ -6,6 +6,8 @@ import type { Message } from "../../types/message";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { selectChat } from "../../store/slices/chatIdSlice";
 import { messageApi } from "../../store/api/messageApi";
+import { ArrowRight } from "lucide-react";
+import { toast } from "react-toastify";
 
 const ChatUi = () => {
   const user = useGetUserQuery();
@@ -16,6 +18,10 @@ const ChatUi = () => {
   const dispatch = useAppDispatch();
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
+    if (!userMessage || userMessage.trim() == "") {
+      toast.error("Message should not be empty");
+      return;
+    }
     setMessageLock(true);
     const activeMessage: Message = {
       content: userMessage,
@@ -62,16 +68,16 @@ const ChatUi = () => {
   }, [chatId, dispatch]);
 
   return (
-    <main className="flex flex-col pb-5 flex-1 min-w-0 justify-end  gap-5 h-full px-3 lg:px-10 pt-5 lg:pt-10 select-text">
+    <main className="flex flex-col pb-5 flex-1 min-w-0 justify-end  items-center gap-5 h-full px-3 lg:px-10 pt-5 lg:pt-10 select-text">
       <ChatHistory activeMessages={messages} />
       <form
-        className="flex justify-center items-center py-1 px-2 mx-2 md:mx-6 lg:mx-10 border-b border-primary"
+        className="flex justify-center items-center w-full max-w-4xl gap-2 lg:gap-5 mx-2 md:mx-6 lg:mx-10  relative"
         onSubmit={submitHandler}
       >
         <input
           type="text"
           name="prompt"
-          className="w-full text-[.7rem] md:text-[.6rem]"
+          className="w-full border-b border-primary py-2 px-4 text-[.7rem] md:text-[.6rem] duration-100  focus:rounded-md focus:border-b-transparent focus:bg-secondary-background"
           placeholder={
             !user.currentData
               ? "Please Login to chat"
@@ -85,6 +91,12 @@ const ChatUi = () => {
             setUserMessage(e.target.value);
           }}
         ></input>
+        <button
+          className="relative z-0 rounded-full p-1  bg-indigo-700 hover:cursor-pointer"
+          type="submit"
+        >
+          <ArrowRight className="w-full" size={20} />
+        </button>
       </form>
     </main>
   );

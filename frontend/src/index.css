@@ -14,6 +14,7 @@
 @theme {
     --color-primary-background: #212121;
     --color-secondary-background: #171717;
+    --color-tertiary-background: #1c1c1c;
     --color-accent: #007bff;
     --color-primary: #fefefe;
     --font-heading: "Montserrat", sans-serif;
@@ -40,7 +41,7 @@ html {
 }
 
 pre {
-    background-color: var(--color-primary-background);
+    background-color: var(--color-secondary-background);
     margin: 0.5rem 0;
     padding: 0.5rem;
     border: none;
