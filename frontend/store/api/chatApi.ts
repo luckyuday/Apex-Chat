@@ -2,10 +2,18 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { chat, createChat } from "../../types/chat";
 import { messageApi } from "./messageApi";
 import { setChatId } from "../slices/chatIdSlice";
+
+const getBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  return "http://localhost:3000";
+};
+
 export const chatApi = createApi({
   reducerPath: "chatApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000/api/chat",
+    baseUrl: `${getBaseUrl()}/api/chat`,
     credentials: "include",
   }),
   tagTypes: ["CHAT"],

@@ -2,10 +2,16 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { authResponse, loginForm, UserForm } from "../../types/user";
 import { chatApi } from "./chatApi";
 import { messageApi } from "./messageApi";
+const getBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  return "http://localhost:3000";
+};
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000/api",
+    baseUrl: `${getBaseUrl()}/api`,
     credentials: "include",
   }),
   tagTypes: ["USER"],
