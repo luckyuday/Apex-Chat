@@ -32,9 +32,16 @@ app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/message", messageRoutes);
-app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+const distPath = path.resolve(__dirname, "../../frontend/dist");
+console.log("Serving static files from:", distPath);
+app.use(express.static(distPath));
 
 app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+  res.sendFile(path.join(distPath, "index.html"), (err) => {
+    if (err) {
+      console.error("Error serving index.html:", err);
+      res.status(500).send("Error serving application");
+    }
+  });
 });
 module.exports = app;
