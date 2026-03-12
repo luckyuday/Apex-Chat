@@ -1,8 +1,12 @@
 <h1 align="center">💬 Apex Chat</h1>
-
+<p align="center">
+<a href="https://apex-chat-noe0.onrender.com">🌐 Live Demo</a>
+</p>
 <p align="center">
 A modern <b>real-time chat application</b> built with a full-stack JavaScript architecture.
 </p>
+
+
 
 <p align="center">
 <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge&logo=react" />
@@ -12,6 +16,9 @@ A modern <b>real-time chat application</b> built with a full-stack JavaScript ar
 </p>
 
 ---
+
+
+
 
 ## 📖 Overview
 
