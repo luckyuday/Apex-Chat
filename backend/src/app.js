@@ -16,11 +16,28 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+      if (!origin) {
+        return callback(null, true);
       }
+
+      if (
+        origin.includes("localhost") ||
+        origin.includes("127.0.0.1") ||
+        origin.includes("5173") ||
+        origin.includes("3000")
+      ) {
+        return callback(null, true);
+      }
+
+      if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) {
+        return callback(null, true);
+      }
+
+      if (origin && origin.includes(".onrender.com")) {
+        return callback(null, true);
+      }
+
+      return callback(null, true);
     },
     credentials: true,
   }),
