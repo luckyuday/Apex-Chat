@@ -3,17 +3,10 @@ import type { chat, createChat } from "../../types/chat";
 import { messageApi } from "./messageApi";
 import { setChatId } from "../slices/chatIdSlice";
 
-const getBaseUrl = () => {
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
-  }
-  return "http://localhost:3000";
-};
-
 export const chatApi = createApi({
   reducerPath: "chatApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${getBaseUrl()}/api/chat`,
+    baseUrl: `/api/chat`,
     credentials: "include",
   }),
   tagTypes: ["CHAT"],
