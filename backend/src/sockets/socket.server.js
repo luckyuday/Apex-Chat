@@ -9,14 +9,9 @@ const {
 const messageModel = require("../models/message.model");
 const { createMemory, queryMemory } = require("../services/pinecone.service");
 function initSocketServer(httpServer) {
-  const allowedOrigins = [
-    "http://localhost:5173",
-    "http://localhost:3000",
-    process.env.FRONTEND_URL || "",
-  ];
   const io = new Server(httpServer, {
     cors: {
-      origin: allowedOrigins,
+      origin: true,
       credentials: true,
     },
   });
