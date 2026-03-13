@@ -17,15 +17,13 @@ const ChatOptions = ({
   const chatId = useAppSelector(selectChat);
   const [deleteChat, { isSuccess, isError }] = useDeleteChatMutation();
   const optionRef = useRef<HTMLDivElement | null>(null);
-  console.log("Is success: ", isSuccess);
   useEffect(() => {
     if (isSuccess) toast.success("Chat Deleted");
     if (isError) toast.error("Couldn't delete chat");
   }, [isSuccess, isError]);
   const deleteHandler = async () => {
     if (!chatId || chatId.trim() == "") return;
-    const result = await deleteChat(chatId).unwrap();
-    console.log(result);
+    await deleteChat(chatId);
   };
   useMenuChecker(optionRef, () => {
     setIsOptionsOpen(false);

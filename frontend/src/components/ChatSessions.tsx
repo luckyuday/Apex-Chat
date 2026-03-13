@@ -16,8 +16,6 @@ export const ChatSessions = () => {
   const [isOptionsOpen, setIsOptionsopen] = useState(false);
   const optionsHandler = (e: React.MouseEvent<SVGSVGElement>) => {
     if (!isOptionsOpen) {
-      console.log(e);
-
       const rect = e.currentTarget.getBoundingClientRect();
       setChatOptionsPosition((prev) => {
         prev.x = rect.left;

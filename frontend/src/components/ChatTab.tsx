@@ -14,7 +14,6 @@ export const ChatTab = ({
   return (
     <div
       onClick={() => {
-        console.log("parent activated");
         dispatch(setChatId(chat._id));
       }}
       className="flex items-center justify-between hover:cursor-pointer hover:bg-primary-background rounded-xl py-2 px-3"
@@ -28,7 +27,6 @@ export const ChatTab = ({
         className="rounded-xl size-5  hover:bg-secondary-background aspect-square p-[.1rem] hover:scale-110 active:scale-90 duration-50"
         onClick={(e) => {
           optionsHandler(e);
-          console.log("child ");
         }}
       />
     </div>

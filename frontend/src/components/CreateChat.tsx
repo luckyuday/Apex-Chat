@@ -20,7 +20,6 @@ const CreateChat = ({
   const createChatHandler: SubmitHandler<createChat> = async (data) => {
     try {
       const result = await createChat(data).unwrap();
-      console.log(result);
       toast.success(result.message);
       dispatch(setChatId(result._id));
       setIsCreatingChat(false);

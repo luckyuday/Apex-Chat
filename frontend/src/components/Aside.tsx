@@ -29,7 +29,6 @@ const Aside = () => {
   };
   const createChatHandler = () => {
     if (user.currentData) {
-      console.log(user);
       setIsCreatingChat(true);
     } else {
       toast.error("Please login or register first.");
