@@ -21,7 +21,7 @@ const CreateChat = ({
     try {
       const result = await createChat(data).unwrap();
       toast.success(result.message);
-      dispatch(setChatId(result._id));
+      dispatch(setChatId(result.chat._id));
       setIsCreatingChat(false);
     } catch (err) {
       toast.error("Some error occured while creating chat");

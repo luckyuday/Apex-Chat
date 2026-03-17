@@ -83,7 +83,7 @@ const Aside = () => {
           >
             Create New chat
           </button>
-          <ChatSessions />
+          <ChatSessions setIsMenuOpen={setIsMenuOpen} />
         </div>
         {!user.currentData ? (
           <div className="flex flex-col gap-3 w-full px-3 py-5">

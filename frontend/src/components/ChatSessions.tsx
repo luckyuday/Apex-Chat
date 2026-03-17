@@ -4,7 +4,13 @@ import type { chat } from "../../types/chat";
 import { useGetUserQuery } from "../../store/api/userApi";
 import ChatOptions from "./ChatOptions";
 import { useState } from "react";
-export const ChatSessions = () => {
+
+export const ChatSessions = ({
+  setIsMenuOpen,
+}: {
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  console.log(setIsMenuOpen);
   const user = useGetUserQuery();
   const { currentData, isFetching } = useGetChatsQuery(undefined, {
     skip: !user.currentData,
