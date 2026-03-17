@@ -24,6 +24,7 @@ const ChatOptions = ({
   const deleteHandler = async () => {
     if (!chatId || chatId.trim() == "") return;
     await deleteChat(chatId);
+    setIsOptionsOpen(false);
   };
   useMenuChecker(optionRef, () => {
     setIsOptionsOpen(false);
