@@ -24,7 +24,7 @@ const ChatHistory = memo(
     }, [activeMessages]);
     return (
       <section
-        className="overflow-y-auto max-w-4xl min-h-0 px-2 lg:px-5 xl:px-10 w-full h-full"
+        className="overflow-y-auto flex flex-col justify-end max-w-4xl min-h-0 px-2 lg:px-5 xl:px-10 w-full h-full"
         ref={chatHistoryRef}
       >
         {isSuccess && currentData && currentData?.length > 0 ? (

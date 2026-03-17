@@ -5,7 +5,7 @@ const ChatUi = lazy(() => import("../components/ChatUi"));
 
 const Home = () => {
   return (
-    <div className="flex w-full h-screen min-h-40">
+    <div className="flex w-full h-dvh min-h-40">
       <Aside />
       <ChatUi />
     </div>
