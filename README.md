@@ -3,7 +3,7 @@
 <a href="https://apex-chat-noe0.onrender.com">🌐 Live Demo</a>
 </p>
 <p align="center">
-A modern <b>real-time chat application</b> built with a full-stack JavaScript architecture.
+A modern <b>real-time AI chat application</b> built with a full-stack JavaScript architecture.
 </p>
 
 
