@@ -39,24 +39,3 @@
 html {
     font-size: clamp(8px, calc(14px + 1vw), 24px);
 }
-
-pre {
-    background-color: var(--color-secondary-background);
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    overflow-x: auto;
-    white-space: pre;
-}
-
-:not(pre) > code {
-    overflow-wrap: break-word;
-}
-
-@media (min-width: 1024px) {
-    pre {
-        padding: 1rem;
-        margin: 1rem 0;
-    }
-}

@@ -1,4 +1,5 @@
 import type { Message } from "../../types/message";
+import "./ChatMessage.css";
 import Markdown from "react-markdown";
 interface ChatMessageprops {
   message: Message;
@@ -15,7 +16,7 @@ export const ChatMessage = ({ message }: ChatMessageprops) => {
         {message.role.charAt(0).toUpperCase()}
       </div>
       <div
-        className={`py-2 px-3 min-w-0  md:max-w-3/4 rounded-sm ${message.role == "user" ? "bg-stone-800" : "bg-tertiary-background"}`}
+        className={`py-2 px-3 min-w-0  md:max-w-3/4 markdown rounded-sm ${message.role == "user" ? "bg-stone-800" : "bg-tertiary-background"}`}
       >
         <Markdown>{message.content}</Markdown>
       </div>
