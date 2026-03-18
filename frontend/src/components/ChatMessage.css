@@ -1,0 +1,112 @@
+/* Markdown Container */
+.markdown {
+    color: var(--color-primary);
+    font-family: var(--font-content);
+    line-height: 1.75;
+    font-size: 0.75rem;
+}
+
+/* Paragraphs */
+.markdown p {
+    margin-bottom: 0.75rem;
+}
+.markdown p:last-child {
+    margin-bottom: 0;
+}
+
+/* Headings */
+.markdown h1 {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 1rem 0 0.75rem;
+}
+.markdown h2 {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 1rem 0 0.5rem;
+}
+.markdown h3 {
+    font-family: var(--font-heading);
+    font-size: 0.5rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0.75rem 0 0.5rem;
+}
+
+/* Inline Code */
+.markdown code {
+    background-color: var(--color-secondary-background);
+    color: var(--color-accent);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85rem;
+}
+
+/* Code Block */
+.markdown pre {
+    background-color: var(--color-secondary-background);
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+}
+.markdown pre code {
+    background: none;
+    color: var(--color-primary);
+    padding: 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+/* Lists */
+.markdown ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+.markdown ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+.markdown li {
+    margin-bottom: 0.25rem;
+    line-height: 1.75;
+}
+
+/* Blockquote */
+.markdown blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+    margin: 0.75rem 0;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* Links */
+.markdown a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.markdown a:hover {
+    opacity: 0.8;
+}
+
+/* Strong */
+.markdown strong {
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+/* Horizontal Rule */
+.markdown hr {
+    border-color: #2a2a2a;
+    margin: 1rem 0;
+}
