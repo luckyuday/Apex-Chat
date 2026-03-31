@@ -1,7 +1,7 @@
 import ChatHistory from "./ChatHistory";
-import { socket } from "../../services/socket";
+import { connectSocket, getSocket } from "../../services/socket";
 import { useGetUserQuery } from "../../store/api/userApi";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { Message } from "../../types/message";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { selectChat } from "../../store/slices/chatIdSlice";
@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 
 const ChatUi = () => {
   const user = useGetUserQuery();
+  const socketRef = useRef<ReturnType<typeof getSocket>>(null);
   const [messageLock, setMessageLock] = useState<boolean>(false);
   const [userMessage, setUserMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -39,13 +40,27 @@ const ChatUi = () => {
       chat: chatId,
     };
     setMessages((prev) => [...prev, activeMessage, responseMessage]);
-    socket.emit("aiMessage", { chat: chatId, content: userMessage });
+
+    socketRef.current?.emit("aiMessage", {
+      chat: chatId,
+      content: userMessage,
+    });
   };
   useEffect(() => {
-    socket.on("connect", () => {});
-    socket.on("disconnect", () => {});
+    if (user.currentData && !socketRef.current) {
+      socketRef.current = connectSocket();
+      socketRef.current?.on("connect", () => {});
+      socketRef.current?.on("disconnect", () => {});
+    }
+  }, [user.currentData]);
+  useEffect(() => {
+    return () => {
+      socketRef.current?.disconnect();
+      socketRef.current = null;
+    };
   }, []);
   useEffect(() => {
+    if (!socketRef.current) return;
     const handler = (message: Message) => {
       if (message.role == "model") {
         setMessageLock(false);
@@ -57,9 +72,10 @@ const ChatUi = () => {
       );
       setMessages((prev) => prev.filter((e) => e.role != message.role));
     };
-    socket.on("aiResponse", handler);
+    socketRef.current.off("aiResponse");
+    socketRef.current.on("aiResponse", handler);
     return () => {
-      socket.off("aiResponse", handler);
+      socketRef.current?.off("aiResponse", handler);
     };
   }, [chatId, dispatch]);
 

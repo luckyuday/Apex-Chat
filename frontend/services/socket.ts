@@ -1,10 +1,12 @@
 import { io, Socket } from "socket.io-client";
-import type {
-  ServerToClientEvents,
-  ClientToServerEvents,
-} from "../types/socket";
 
-export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io({
-  withCredentials: true,
-  reconnectionAttempts: 3,
-});
+let socket: Socket | null = null;
+
+export const connectSocket = () => {
+  socket = io({
+    withCredentials: true,
+  });
+  return socket;
+};
+
+export const getSocket = () => socket;
