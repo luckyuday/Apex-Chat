@@ -15,13 +15,12 @@ const chatSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    new: {
-      type: Boolean,
-      default: false,
-    },
   },
   { timestamps: true },
 );
+
+// The chat list is the hottest read in the app
+chatSchema.index({ user: 1, lastActivity: -1 });
 
 const chatModel = mongoose.model("chats", chatSchema);
 

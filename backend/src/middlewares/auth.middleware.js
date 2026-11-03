@@ -8,15 +8,26 @@ async function authUser(req, res, next) {
       message: "Unauthorised Request",
     });
   }
+  let decoded;
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch {
+    // Invalid/expired token — genuinely unauthorised
+    return res.status(401).json({ message: "Unauthorised Request" });
+  }
+
+  try {
     const user = await userModel.findById(decoded.id).select("-password");
+    if (!user) {
+      return res.status(401).json({
+        message: "Unauthorised Request",
+      });
+    }
     req.user = user;
     next();
   } catch (error) {
-    res.status(401).json({
-      message: "Unauthorised Request",
-    });
+    // DB/infrastructure failure: surface it, don't masquerade as 401
+    next(error);
   }
 }
 

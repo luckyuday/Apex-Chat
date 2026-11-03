@@ -4,14 +4,20 @@ const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
   const {
-    fullName: { firstName, lastName },
-    email,
+    fullName: { firstName, lastName } = {},
+    email: rawEmail,
     password,
-  } = req.body;
-  const isUserExists = await userModel.findOne({ email: email });
+  } = req.body || {};
+  if (!firstName || !lastName || !rawEmail || !password) {
+    return res.status(400).json({
+      message: "Missing required fields",
+    });
+  }
+  const email = String(rawEmail).trim().toLowerCase();
+  const isUserExists = await userModel.findOne({ email });
 
   if (isUserExists) {
-    return res.status(401).json({
+    return res.status(409).json({
       message: "Email already exists",
     });
   }
@@ -24,9 +30,13 @@ const registerUser = async (req, res) => {
     password: hashedPassword,
   });
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
   res.cookie("token", token, {
     httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
@@ -36,7 +46,11 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email: rawEmail, password } = req.body || {};
+  if (!rawEmail || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+  const email = String(rawEmail).trim().toLowerCase();
   const user = await userModel.findOne({ email });
   if (!user) {
     return res.status(400).json({ message: "Invalid email or password" });
@@ -46,9 +60,13 @@ const loginUser = async (req, res) => {
     return res.status(400).json({ message: "Invalid email or password" });
   }
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
   res.cookie("token", token, {
     httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   res.status(200).json({

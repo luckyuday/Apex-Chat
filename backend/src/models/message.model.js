@@ -22,6 +22,9 @@ const messageSchema = new mongoose.Schema(
   },
   { timestamps: true, versionKey: false },
 );
+// History fetches + socket short-term memory both filter by chat, ordered by time
+messageSchema.index({ chat: 1, user: 1, createdAt: -1 });
+
 const messageModel = mongoose.model("message", messageSchema);
 
 module.exports = messageModel;

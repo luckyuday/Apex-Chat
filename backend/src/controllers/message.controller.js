@@ -9,7 +9,7 @@ async function getMessages(req, res) {
       .select("-__v -updatedAt");
     res.status(200).json(messages);
   } catch (err) {
-    res.staus(500).json({
+    res.status(500).json({
       message: "Something went wrong",
     });
   }
