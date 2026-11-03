@@ -8,7 +8,7 @@ export const ChatTab = ({
   optionsHandler,
 }: {
   chat: chat;
-  optionsHandler: (e: React.MouseEvent<SVGSVGElement>) => void;
+  optionsHandler: (e: React.MouseEvent<SVGSVGElement>, target: chat) => void;
 }) => {
   const dispatch = useAppDispatch();
   return (
@@ -26,7 +26,10 @@ export const ChatTab = ({
       <Ellipsis
         className="rounded-xl size-5  hover:bg-secondary-background aspect-square p-[.1rem] hover:scale-110 active:scale-90 duration-50"
         onClick={(e) => {
-          optionsHandler(e);
+          // Don't let the row onClick re-select the active chat as a side
+          // effect of opening this chat's options menu.
+          e.stopPropagation();
+          optionsHandler(e, chat);
         }}
       />
     </div>

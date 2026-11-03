@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { Message } from "../../types/message";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { selectChat } from "../../store/slices/chatIdSlice";
-import { messageApi } from "../../store/api/messageApi";
+import { messageApi, useGetMessagesQuery } from "../../store/api/messageApi";
 import { ArrowRight } from "lucide-react";
 import { toast } from "react-toastify";
 
@@ -17,10 +17,23 @@ const ChatUi = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const chatId = useAppSelector(selectChat);
   const dispatch = useAppDispatch();
+  // Mirror the RTK Query cache for this chat (RTK dedupes the request) so
+  // the socket handler can read the freshest list without a second fetch.
+  const { currentData: cachedMessages } = useGetMessagesQuery(chatId, {
+    skip: !chatId,
+  });
+  const cacheRef = useRef<Message[]>([]);
+  useEffect(() => {
+    cacheRef.current = cachedMessages ?? [];
+  }, [cachedMessages]);
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
     if (!userMessage || userMessage.trim() == "") {
       toast.error("Message should not be empty");
+      return;
+    }
+    if (!socketRef.current?.connected) {
+      toast.error("Connection to the server is lost. Please refresh the page.");
       return;
     }
     setMessageLock(true);
@@ -49,8 +62,12 @@ const ChatUi = () => {
   useEffect(() => {
     if (user.currentData && !socketRef.current) {
       socketRef.current = connectSocket();
-      socketRef.current?.on("connect", () => {});
-      socketRef.current?.on("disconnect", () => {});
+      socketRef.current?.on("disconnect", () => {
+        // Connection dropped mid-response: release the lock and drop the
+        // pending "Loading...." bubble so the input doesn't stick disabled.
+        setMessageLock(false);
+        setMessages((prev) => prev.filter((m) => m._id !== "pending"));
+      });
     }
   }, [user.currentData]);
   useEffect(() => {
@@ -60,22 +77,61 @@ const ChatUi = () => {
     };
   }, []);
   useEffect(() => {
+    // Drop any pending messages/lock belonging to the previous chat
+    setMessages([]);
+    setMessageLock(false);
+  }, [chatId]);
+  useEffect(() => {
     if (!socketRef.current) return;
     const handler = (message: Message) => {
+      if (message.chat && message.chat !== chatId) return;
       if (message.role == "model") {
         setMessageLock(false);
       }
+      if (!chatId) return;
+      // upsert instead of updateQueryData: the cache entry may not exist
+      // yet (query still fetching / skipped), and updateQueryData throws
+      // on a missing entry, which would abort the handler and stick the
+      // "Loading...." bubble. Dedupe by _id so a concurrent refetch that
+      // already contains the message can't create a duplicate.
       dispatch(
-        messageApi.util.updateQueryData("getMessages", chatId, (draft) => {
-          draft.push(message);
-        }),
+        messageApi.util.upsertQueryData(
+          "getMessages",
+          chatId,
+          [
+            ...cacheRef.current.filter((m) => m._id !== message._id),
+            message,
+          ],
+        ),
       );
       setMessages((prev) => prev.filter((e) => e.role != message.role));
     };
+    // Streaming deltas: grow the pending "Loading...." bubble in place as
+    // the answer is generated. The final aiResponse event replaces it with
+    // the persisted copy (the local optimistic bubbles are dropped, and the
+    // RTK cache drives rendering from then on).
+    const chunkHandler = (payload: { chat: string; delta: string }) => {
+      if (payload.chat && payload.chat !== chatId) return;
+      setMessages((prev) =>
+        prev.map((m) =>
+          m._id === "pending"
+            ? {
+                ...m,
+                content:
+                  (m.content === "Loading...." ? "" : m.content) +
+                  payload.delta,
+              }
+            : m,
+        ),
+      );
+    };
     socketRef.current.off("aiResponse");
     socketRef.current.on("aiResponse", handler);
+    socketRef.current.off("aiResponseChunk");
+    socketRef.current.on("aiResponseChunk", chunkHandler);
     return () => {
       socketRef.current?.off("aiResponse", handler);
+      socketRef.current?.off("aiResponseChunk", chunkHandler);
     };
   }, [chatId, dispatch]);
 
@@ -89,6 +145,7 @@ const ChatUi = () => {
         <input
           type="text"
           name="prompt"
+          autoComplete="off"
           className="w-full border-b border-primary py-2 px-4 text-[.7rem] md:text-[.6rem] duration-100  focus:rounded-md focus:border-b-transparent focus:bg-secondary-background"
           placeholder={
             !user.currentData

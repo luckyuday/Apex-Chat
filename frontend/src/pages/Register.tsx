@@ -24,8 +24,14 @@ const Register = () => {
       reset();
       navigate("/");
     } catch (err) {
-      console.log(err);
-      toast.error("Some error occured");
+      // Surface the backend's actual message (e.g. "Email already exists")
+      // instead of a generic toast.
+      if (typeof err === "object" && err !== null && "data" in err) {
+        const error = err as { data: authResponse };
+        toast.error(error.data?.message || "Some error occurred");
+      } else {
+        toast.error("Some error occurred");
+      }
     }
   };
 
@@ -153,8 +159,8 @@ const Register = () => {
                       trigger("confirmPassword");
                     },
                     maxLength: {
-                      value: 20,
-                      message: "Too long first name!",
+                      value: 30,
+                      message: "Too long password!",
                     },
                     validate: (value) =>
                       value === password || "Passwords do not match",

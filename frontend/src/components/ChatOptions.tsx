@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useMenuChecker } from "../hooks/useMenuChecker";
-import { useAppSelector } from "../hooks/hooks";
-import { selectChat } from "../../store/slices/chatIdSlice";
+import type { chat } from "../../types/chat";
 import { useDeleteChatMutation } from "../../store/api/chatApi";
 import { toast } from "react-toastify";
 
@@ -9,12 +8,13 @@ const ChatOptions = ({
   isOptionsOpen,
   setIsOptionsOpen,
   chatOptionsPosition,
+  optionsChat,
 }: {
   isOptionsOpen: boolean;
   setIsOptionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   chatOptionsPosition: { x: number; y: number };
+  optionsChat: chat | null;
 }) => {
-  const chatId = useAppSelector(selectChat);
   const [deleteChat, { isSuccess, isError }] = useDeleteChatMutation();
   const optionRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -22,8 +22,14 @@ const ChatOptions = ({
     if (isError) toast.error("Couldn't delete chat");
   }, [isSuccess, isError]);
   const deleteHandler = async () => {
-    if (!chatId || chatId.trim() == "") return;
-    await deleteChat(chatId);
+    // Delete the chat whose menu was clicked, not whichever is active.
+    if (!optionsChat || optionsChat._id.trim() == "") return;
+    // Destructive and irreversible — require an explicit confirmation.
+    const confirmed = window.confirm(
+      "Delete this chat and all of its messages? This cannot be undone.",
+    );
+    if (!confirmed) return;
+    await deleteChat(optionsChat._id);
     setIsOptionsOpen(false);
   };
   useMenuChecker(optionRef, () => {

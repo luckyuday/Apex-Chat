@@ -90,8 +90,8 @@ const Login = () => {
                 className="w-full mt-1 p-2 rounded-t-lg  focus:bg-primary-background duration-75"
                 {...register("password", {
                   maxLength: {
-                    value: 20,
-                    message: "Password cannot be more than 20 characters",
+                    value: 30,
+                    message: "Password cannot be more than 30 characters",
                   },
                   required: "Password cannot be empty",
                 })}

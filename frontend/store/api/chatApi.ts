@@ -1,7 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { chat, chatResponse, createChat } from "../../types/chat";
 import { messageApi } from "./messageApi";
-import { setChatId } from "../slices/chatIdSlice";
+import { setChatId, selectChat } from "../slices/chatIdSlice";
+// Type-only: erased at runtime, so this doesn't create a runtime circular
+// import even though store.ts imports chatApi for its reducer.
+import type { RootState } from "../store";
 
 export const chatApi = createApi({
   reducerPath: "chatApi",
@@ -19,13 +22,19 @@ export const chatApi = createApi({
       query: (chatName) => ({ url: "/", body: chatName, method: "POST" }),
       invalidatesTags: ["CHAT"],
     }),
-    deleteChat: build.mutation<string, string>({
+    deleteChat: build.mutation<{ message: string }, string>({
       query: (chatID) => ({ url: `/${chatID}`, method: "DELETE" }),
       invalidatesTags: ["CHAT"],
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+      async onQueryStarted(deletedChatId, { dispatch, getState, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(messageApi.util.resetApiState());
-        dispatch(setChatId(""));
+        // Clear only the deleted chat's message cache — deleting a
+        // background chat must not wipe the active chat's history.
+        dispatch(
+          messageApi.util.upsertQueryData("getMessages", deletedChatId, []),
+        );
+        if (selectChat(getState() as RootState) === deletedChatId) {
+          dispatch(setChatId(""));
+        }
       },
     }),
   }),

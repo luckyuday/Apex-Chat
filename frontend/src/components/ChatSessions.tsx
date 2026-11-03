@@ -5,12 +5,7 @@ import { useGetUserQuery } from "../../store/api/userApi";
 import ChatOptions from "./ChatOptions";
 import { useState } from "react";
 
-export const ChatSessions = ({
-  setIsMenuOpen,
-}: {
-  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
-  console.log(setIsMenuOpen);
+export const ChatSessions = () => {
   const user = useGetUserQuery();
   const { currentData, isFetching } = useGetChatsQuery(undefined, {
     skip: !user.currentData,
@@ -20,15 +15,13 @@ export const ChatSessions = ({
     y: 0,
   });
   const [isOptionsOpen, setIsOptionsopen] = useState(false);
-  const optionsHandler = (e: React.MouseEvent<SVGSVGElement>) => {
-    if (!isOptionsOpen) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      setChatOptionsPosition((prev) => {
-        prev.x = rect.left;
-        prev.y = rect.top;
-        return prev;
-      });
-    }
+  const [optionsChat, setOptionsChat] = useState<chat | null>(null);
+  const optionsHandler = (e: React.MouseEvent<SVGSVGElement>, target: chat) => {
+    // Position the menu under this chat's ellipsis on every open,
+    // and close it otherwise.
+    const rect = e.currentTarget.getBoundingClientRect();
+    setChatOptionsPosition({ x: rect.left, y: rect.top });
+    setOptionsChat(target);
     setIsOptionsopen((prev) => !prev);
   };
   return (
@@ -45,7 +38,7 @@ export const ChatSessions = ({
                     <ChatTab
                       key={chat._id}
                       chat={chat}
-                      optionsHandler={optionsHandler}
+                      optionsHandler={(e) => optionsHandler(e, chat)}
                     />
                   );
                 })
@@ -55,6 +48,7 @@ export const ChatSessions = ({
             isOptionsOpen={isOptionsOpen}
             setIsOptionsOpen={setIsOptionsopen}
             chatOptionsPosition={chatOptionsPosition}
+            optionsChat={optionsChat}
           />
         </>
       ) : (
