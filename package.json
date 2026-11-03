@@ -1,8 +1,7 @@
 {
-  "name": "150",
+  "name": "apex-chat",
   "version": "1.0.0",
-  "description": "MERN Chat Application",
-  "type": "module",
+  "description": "Apex Chat — MERN + AI chat application with long-term memory",
   "main": "backend/server.js",
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
@@ -10,8 +9,8 @@
     "start": "node backend/server.js",
     "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend"
   },
-  "dependencies": {
-    "concurrently": "^8.2.2"
+  "engines": {
+    "node": ">=22.0.0"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

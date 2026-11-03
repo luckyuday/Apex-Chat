@@ -1,0 +1,18 @@
+# Keeps the free Render instance from sleeping. Render's free tier spins
+# an idle instance down after ~15 minutes, so pinging /health more often
+# than that means the very first request after a while is never a cold boot.
+name: keepalive
+on:
+  schedule:
+    # Off-the-hour minutes to avoid the fleet-wide :00/:30 stampede
+    - cron: "3-59/5 * * * *"
+  workflow_dispatch: {}
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /health
+        run: |
+          curl -fsS "${{ secrets.RENDER_URL }}/health"
+          echo
+          echo "poked the instance"

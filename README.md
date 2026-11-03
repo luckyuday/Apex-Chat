@@ -96,12 +96,41 @@ npm run dev
 Create a `.env` file inside the `backend` directory:
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
+MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
 GEMINI_API_KEY=your_gemini_api_key
 PINECONE_API_KEY=your_pinecone_api_key
-PINECONE_INDEX=your_pinecone_index_name
+PINECONE_INDEX=your_pinecone_index_name   # defaults to "chat-gpt"
 ```
+
+---
+
+## 🚀 Deployment (Render, single service)
+
+The whole app ships as **one service**: Express serves the API, Socket.IO, and the built frontend from `frontend/dist` — same origin, no cross-site setup.
+
+### Build & push
+```bash
+# Build the frontend so the static files in frontend/dist are current
+npm run build
+git add -A && git commit -m "Rebuild frontend dist" && git push
+```
+> `frontend/dist` is committed on purpose so the Render service can deploy straight from the repo.
+
+### Render service settings
+- **Root Directory:** `backend`
+- **Build Command:** `npm install`
+- **Start Command:** `npm start`
+- **Health Check Path:** `/health`
+- **Node version:** 22 (see `.nvmrc`)
+
+### Required env vars on Render
+`MONGODB_URI`, `JWT_SECRET`, `GEMINI_API_KEY`, `PINECONE_API_KEY`, and optionally `PORT`, `PINECONE_INDEX`, `FRONTEND_URL`.
+
+The server **refuses to boot** if any required var is missing, and exits if the MongoDB connection fails — a misconfigured deploy will fail fast instead of serving a broken app.
+
+### Keeping the instance awake (free tier)
+Free Render instances sleep after ~15 min idle, so the first request after that is a slow cold start. The `.github/workflows/keepalive.yml` job pings `/health` every 5 minutes to keep it warm — set the `RENDER_URL` repo **secret** (the service's full URL, e.g. `https://apex-chat.example.onrender.com`) in the repo settings. Set Render's health-check path to `/health`: it answers 503 when the DB is unreachable so Render restarts a broken service instead of holding it.
 
 ---
 
